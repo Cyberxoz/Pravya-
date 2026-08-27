@@ -29,6 +29,7 @@ import { StorageService } from './lib/storage';
 const AppContent: React.FC = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [isAiOpen, setIsAiOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSession, setActiveSession] = useState<SessionRecord | null>(null);
   const [isCheckInOpen, setIsCheckInOpen] = useState(false);
   const [checkInSessionId, setCheckInSessionId] = useState<string | undefined>(undefined);
@@ -48,6 +49,14 @@ const AppContent: React.FC = () => {
     setActiveSession(session);
   };
 
+  const handleQuickStartSession = () => {
+    const todaySessions = StorageService.getTodaySessions();
+    const pendingSession = todaySessions.find((s) => s.status !== 'COMPLETED') || todaySessions[0];
+    if (pendingSession) {
+      setActiveSession(pendingSession);
+    }
+  };
+
   const handleFinishSession = (completedSessionId: string, durationMins: number) => {
     // Record completion in storage
     StorageService.completeSession(completedSessionId, durationMins);
@@ -65,11 +74,13 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200">
-      {/* Top Navbar */}
+      {/* Fixed Header Navbar */}
       <Navbar
         darkMode={darkMode}
         onToggleDarkMode={() => setDarkMode(!darkMode)}
         onOpenAi={() => setIsAiOpen(true)}
+        onStartSessionClick={handleQuickStartSession}
+        onToggleMobileMenu={() => setIsMobileMenuOpen(true)}
       />
 
       <div className="flex-1 flex overflow-hidden max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 gap-6">
@@ -95,17 +106,25 @@ const AppContent: React.FC = () => {
             <Route path="/weekly" element={<WeeklyStoryPage />} />
             <Route path="/progress" element={<ProgressPage />} />
             <Route path="/report" element={<ReportPage />} />
+            <Route path="/reports" element={<ReportPage />} />
             <Route path="/assistant" element={<AssistantPage />} />
             <Route path="/reminders" element={<RemindersPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route
+              path="*"
+              element={<DashboardPage onStartSession={handleStartSession} />}
+            />
           </Routes>
         </main>
       </div>
 
-      {/* Mobile Navigation Bar */}
-      <MobileNav onOpenAi={() => setIsAiOpen(true)} />
+      {/* Mobile Navigation Drawer & Bottom Access */}
+      <MobileNav
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+      />
 
       {/* Interactive Active Session Modal */}
       {activeSession && (

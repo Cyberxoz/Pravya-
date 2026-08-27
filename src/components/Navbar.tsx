@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Bot, Menu, Sparkles } from 'lucide-react';
+import { Play, Bot, Menu, Sparkles, Sun, Moon } from 'lucide-react';
 import { PravyaLogo } from './PravyaLogo';
 
 interface NavbarProps {
@@ -18,16 +18,18 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAi,
   onToggleMobileMenu,
   streakCount = 5,
+  darkMode = false,
+  onToggleDarkMode,
 }) => {
   const handleOpenAi = onOpenAssistant || onOpenAi;
 
   return (
     <header
       id="pravya-header"
-      className="sticky top-0 z-30 bg-[#FAF8F5]/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-[#0F4C4A]/10 dark:border-slate-800 px-4 sm:px-6 py-3"
+      className="sticky top-0 z-30 w-full bg-[#FAF8F5]/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-[#0F4C4A]/10 dark:border-slate-800 px-4 sm:px-6 py-3 transition-colors"
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-        {/* Left: Mobile menu toggle & Logo */}
+        {/* Left: Mobile menu toggle & Brand Logo */}
         <div className="flex items-center gap-3">
           <button
             id="mobile-menu-toggle-btn"
@@ -38,18 +40,35 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Menu className="w-5 h-5" />
           </button>
 
-          <div className="lg:hidden">
+          <div className="flex items-center gap-2">
             <PravyaLogo size="sm" showWordmark={true} variant="deep-teal" />
           </div>
 
-          <div className="hidden lg:flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full bg-[#0F4C4A]/8 text-[#0F4C4A] dark:bg-teal-950/80 dark:text-teal-300 border border-[#0F4C4A]/15 dark:border-teal-800">
+          <div className="hidden sm:flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full bg-[#0F4C4A]/8 text-[#0F4C4A] dark:bg-teal-950/80 dark:text-teal-300 border border-[#0F4C4A]/15 dark:border-teal-800">
             <Sparkles className="w-3.5 h-3.5 text-[#0F4C4A] dark:text-teal-400" />
             <span>Adherence Streak: {streakCount} Days</span>
           </div>
         </div>
 
-        {/* Right: Action Buttons */}
+        {/* Right: Actions (Dark Mode, AI Assistant, Start Session) */}
         <div className="flex items-center gap-2.5">
+          {/* Dark Mode Toggle */}
+          {onToggleDarkMode && (
+            <button
+              id="theme-toggle-btn"
+              onClick={onToggleDarkMode}
+              className="p-2 rounded-xl border border-[#0F4C4A]/15 dark:border-slate-700 bg-white/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-[#0F4C4A]/5 dark:hover:bg-slate-700 transition-colors shadow-2xs"
+              aria-label="Toggle Dark Mode"
+              title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            >
+              {darkMode ? (
+                <Sun className="w-4 h-4 text-amber-400" />
+              ) : (
+                <Moon className="w-4 h-4 text-[#0F4C4A]" />
+              )}
+            </button>
+          )}
+
           {/* AI Assistant Button */}
           <button
             id="open-ai-assistant-btn"
@@ -74,5 +93,6 @@ export const Navbar: React.FC<NavbarProps> = ({
     </header>
   );
 };
+
 
 

@@ -36,7 +36,7 @@ export const Sidebar: React.FC = () => {
   return (
     <aside
       id="pravya-sidebar"
-      className="hidden lg:flex flex-col w-64 border-r border-[#0F4C4A]/10 dark:border-slate-800 bg-[#FAF8F5] dark:bg-slate-900 h-screen sticky top-0 shrink-0 select-none z-20"
+      className="hidden lg:flex flex-col w-64 border-r border-[#0F4C4A]/10 dark:border-slate-800 bg-[#FAF8F5] dark:bg-slate-900 h-[calc(100vh-6rem)] sticky top-20 shrink-0 select-none z-20 rounded-2xl"
     >
       {/* App Brand Header */}
       <div className="p-5 border-b border-[#0F4C4A]/10 dark:border-slate-800/80 flex flex-col gap-1.5">
